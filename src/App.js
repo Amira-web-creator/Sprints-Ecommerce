@@ -5,7 +5,6 @@ import AuthContext from "./components/store/auth-context";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
-import Modal from "./UI/Modal/Modal";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -14,7 +13,6 @@ function App() {
     <div>
       <Layout>
         <Switch>
-       
           <Route path="/" exact>
             <Redirect to="/home" />
           </Route>

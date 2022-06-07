@@ -10,8 +10,8 @@ const myModal = (props) => {
   return (
     <Modal>
       <div className={classes.modal}>
-        <div id="myModal" class="modal">
-          <div class="modal-content">
+        <div id="myModal">
+          <div className={classes.modalcontent}>
             <p>{props.content}</p>
           </div>
         </div>

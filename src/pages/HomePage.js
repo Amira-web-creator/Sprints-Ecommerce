@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext } from "react";
 import StartingPageContent from "../components/StartingPage/StartingPageContent";
 import AuthContext from "../components/store/auth-context";
 import MyModal from "../components/MyModal/MyModal";

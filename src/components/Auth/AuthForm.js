@@ -6,18 +6,11 @@ import AuthContext from "../store/auth-context";
 import Input from "../../UI/Input/Input";
 import FormActions from "../../UI/Input/FormActions/FormActions";
 
-const emailregx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const passregx = /^(?=.*\d)(?=.*[a-z])(?=.*[a-zA-Z]).{8,}$/;
-
-const isNotEmpty = (value) => value.trim() !== "";
-const isEmail = (value) => value.toLowerCase().match(emailregx);
-
-const isPassword = (value) => value.toLowerCase().match(passregx);
-
 const AuthForm = (props) => {
   const history = useHistory();
   const authCtx = useContext(AuthContext);
   const modalCtx = useContext(AuthContext);
+  
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
@@ -33,7 +26,7 @@ const AuthForm = (props) => {
     valueChangeHandler: nameChangeHandler,
     inputBlureHandler: nameBlureHandler,
     reset: resetNameInput,
-  } = useInput(isNotEmpty);
+  } = useInput(props.isNotEmpty);
 
   const {
     value: enteredEmail,
@@ -42,7 +35,7 @@ const AuthForm = (props) => {
     valueChangeHandler: emailChangeHandler,
     inputBlureHandler: emailBlureHandler,
     reset: resetEmailInput,
-  } = useInput(isEmail);
+  } = useInput(props.isEmail);
 
   const {
     value: enteredPassword,
@@ -51,9 +44,9 @@ const AuthForm = (props) => {
     valueChangeHandler: passwordChangeHandler,
     inputBlureHandler: passwordBlureHandler,
     reset: resetPasswordInput,
-  } = useInput(isPassword);
+  } = useInput(props.isPassword);
 
-  const isThaSame = (value) => value === enteredPassword && value.trim() !== "";
+  const isTheSame = (value) => value === enteredPassword && value.trim() !== "";
 
   const {
     value: reEnteredPassword,
@@ -62,7 +55,7 @@ const AuthForm = (props) => {
     valueChangeHandler: reEnteredPasswordChangeHandler,
     inputBlureHandler: reEnteredPasswordBlureHandler,
     reset: resetReEnteredPasswordInput,
-  } = useInput(isThaSame);
+  } = useInput(isTheSame);
 
   const allIsValid =
     enteredNameIsValid &&
@@ -145,8 +138,8 @@ const AuthForm = (props) => {
           new Date().getTime() + +data.expiresIn * 1000
         );
         authCtx.login(data.idToken, expirationTime.toISOString());
-        modalCtx.onShowModal()
-      
+        modalCtx.onShowModal();
+
         history.replace("/");
         localStorage.setItem("uname", data.displayName);
       })

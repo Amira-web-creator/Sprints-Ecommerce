@@ -1,17 +1,17 @@
 import React from "react";
-
+import Button from "../../Button/Button";
 import classes from './FormActions.module.css'
 
 const FormActions = (props) => {
   return (
     <div>
       <div className={classes.formactions}>
-        <button disabled={props.disabled}>
+        <Button disabled={props.disabled} type="submit">
           {props.isLogin ? "Login" : "Create Account"}
-        </button>
-        <button type="button" onClick={props.switchAuthModeHandler}>
+        </Button>
+        <Button type="button" onClick={props.switchAuthModeHandler}>
           {props.isLogin ? "Create new account" : "Login with existing account"}
-        </button>
+        </Button>
       </div>
     </div>
   );

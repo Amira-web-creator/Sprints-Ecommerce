@@ -1,22 +1,13 @@
-import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import "./AuthForm.css";
-import useInput from "../hooks/use-input";
-import AuthContext from "../store/auth-context";
+import useInput from "../../hooks/use-input";
 import Input from "../../UI/Input/Input";
 import FormActions from "../../UI/Input/FormActions/FormActions";
 
 const AuthForm = (props) => {
-  const history = useHistory();
-  const authCtx = useContext(AuthContext);
-  const modalCtx = useContext(AuthContext);
-  
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
 
   const switchAuthModeHandler = () => {
-    setIsLogin((prevState) => !prevState);
+    props.setIsLogin((prevState) => !prevState);
   };
 
   const {
@@ -74,7 +65,7 @@ const AuthForm = (props) => {
 
   let formIsValid = false;
 
-  if (!isLogin) {
+  if (!props.isLogin) {
     if (allIsValid) {
       formIsValid = true;
     }
@@ -93,9 +84,9 @@ const AuthForm = (props) => {
 
     resetValues();
 
-    setIsLoading(true);
+    props.setIsLoading(true);
     let url;
-    if (isLogin) {
+    if (props.isLogin) {
       url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAsJgNrox24sxPJLVDa_0hTtU5iem_ZvN4";
     } else {
@@ -116,7 +107,7 @@ const AuthForm = (props) => {
       },
     })
       .then((res) => {
-        setIsLoading(false);
+        props.setIsLoading(false);
 
         if (res.ok) {
           return res.json();
@@ -137,10 +128,10 @@ const AuthForm = (props) => {
         const expirationTime = new Date(
           new Date().getTime() + +data.expiresIn * 1000
         );
-        authCtx.login(data.idToken, expirationTime.toISOString());
-        modalCtx.onShowModal();
+        props.authCtx.login(data.idToken, expirationTime.toISOString());
+        props.modalCtx.onShowModal();
 
-        history.replace("/");
+        props.history.replace("/");
         localStorage.setItem("uname", data.displayName);
       })
 
@@ -167,9 +158,9 @@ const AuthForm = (props) => {
 
   return (
     <React.Fragment>
-      <h1>{isLogin ? "Login" : "Sign Up"}</h1>
+      <h1>{props.isLogin ? "Login" : "Sign Up"}</h1>
       <form className="app" onSubmit={formSubmissionHandler}>
-        {!isLogin && (
+        {!props.isLogin && (
           <Input
             nameClasses={nameInputClasses}
             error={nameInputHasError}
@@ -207,7 +198,7 @@ const AuthForm = (props) => {
             acombination of characters and numbers."
         />
 
-        {!isLogin && (
+        {!props.isLogin && (
           <Input
             nameClasses={reEnteredPasswordInputClasses}
             error={reEnteredPasswordInputHasError}
@@ -220,10 +211,10 @@ const AuthForm = (props) => {
             errormsg="passwords must match"
           />
         )}
-        {isLoading && <p>Sending request....</p>}
+        {props.isLoading && <p>Sending request....</p>}
         <FormActions
           disabled={!formIsValid}
-          isLogin={isLogin}
+          isLogin={props.isLogin}
           switchAuthModeHandler={switchAuthModeHandler}
         ></FormActions>
       </form>
